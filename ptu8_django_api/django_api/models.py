@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils.translation import gettext_lazy as _
 # Create your models here.
 
@@ -33,13 +34,17 @@ class AlbumReview(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="album_reviews")
     album = models.ForeignKey(Album, on_delete=models.CASCADE, related_name="reviews")
     content = models.CharField(max_length=1000)
-    score = models.IntegerField()
+    score = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(10)])
     
+    def __str__(self) -> str:
+        return f"{self.album.name} - {self.user.get_username()}"
+
 
 class AlbumReviewComment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="album_review_comments")
     album_review = models.ForeignKey(AlbumReview, on_delete=models.CASCADE, related_name="comments")
     content = models.CharField(max_length=1000)
+
 
 
 class AlbumReviewLike(models.Model):
