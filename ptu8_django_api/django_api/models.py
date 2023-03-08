@@ -8,7 +8,7 @@ User = get_user_model()
 
 class Band(models.Model):
     name = models.CharField(max_length=150)
-
+    image = models.ImageField(upload_to='django_api/images', blank=True, null=True)
     def __str__(self) -> str:
         return self.name
 
@@ -16,7 +16,7 @@ class Band(models.Model):
 class Album(models.Model):
     band = models.ForeignKey(Band, on_delete=models.CASCADE, related_name="albums")
     name = models.CharField(max_length=1000)
-
+    cover = models.ImageField(upload_to='django_api/covers', blank=True, null=True)
     def __str__(self) -> str:
         return self.name
 
@@ -46,7 +46,6 @@ class AlbumReviewComment(models.Model):
     content = models.CharField(max_length=1000)
 
 
-
 class AlbumReviewLike(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="album_review_like")
-    album_review = models.ForeignKey(AlbumReview, on_delete=models.CASCADE, related_name="likes")    
+    album_review = models.ForeignKey(AlbumReview, on_delete=models.CASCADE, related_name="likes")
